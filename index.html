@@ -95,6 +95,8 @@
   .listings{padding:12px 22px 14px}
   .sechead{font-family:var(--label); text-transform:uppercase; letter-spacing:.16em; font-size:11px; font-weight:700; color:var(--ink); padding:22px 0 10px; border-bottom:2px solid var(--ink); display:flex; justify-content:space-between; align-items:flex-end}
   .sechead .sub{color:var(--stone); font-weight:600; letter-spacing:.1em; font-size:10px}
+  .dek{font-family:var(--body); font-style:italic; color:var(--ink-soft); font-size:13.5px; line-height:1.5; padding:10px 0 2px}
+  .noresult{font-family:var(--body); font-style:italic; color:var(--stone); font-size:14px; padding:24px 2px; text-align:center}
   .item{padding:20px 0; border-bottom:1px solid var(--rule); display:grid; grid-template-columns:1fr auto; gap:7px 14px; cursor:pointer; align-items:center}
   .item:active{background:var(--paper-2)}
   .item .ir{font-family:var(--disp); font-size:21px; line-height:1.05; color:var(--ink); grid-column:1}
@@ -203,6 +205,11 @@
   .tab[aria-selected="true"]{color:var(--cherry)}
   .tab[aria-selected="true"] svg{stroke:var(--cherry)}
   .homebar{height:5px;width:120px;background:var(--ink);opacity:.5;border-radius:3px;margin:2px auto 7px}
+  .toggle{appearance:none;border:none;cursor:pointer;width:50px;height:28px;border-radius:999px;background:var(--stone);position:relative;transition:background .18s ease;padding:0;flex:0 0 auto}
+  .toggle .knob{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--paper);transition:left .18s ease;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+  .toggle[aria-checked="true"]{background:var(--moss)}
+  .toggle[aria-checked="true"] .knob{left:25px}
+  .toggle:active{transform:translateY(1px)}
 
   .caption{font-family:var(--label); color:#8f8168; font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; text-align:center}
 </style>
@@ -241,8 +248,8 @@
             </div>
           </div>
 
-          <div class="lead">
-            <div class="kicker">Tonight &middot; 21:10</div>
+          <div class="lead" id="lead">
+            <div class="kicker">Tonight &middot; 21:10 &ndash; 23:25</div>
             <div class="route">Pune <span class="arrow">&rarr;</span> Delhi</div>
             <div class="byline">Akasa Air <span class="dot"></span> <span class="qp">QP&nbsp;1412</span></div>
             <div class="leadmeta" style="margin-top:14px">
@@ -260,23 +267,10 @@
           </div>
 
           <div class="listings">
-            <div class="sechead"><span>Also in the next 24h</span><span class="sub">Member fares</span></div>
-
-            <div class="item" data-open="detail">
-              <div class="ir">Mumbai <span class="arrow">&rarr;</span> Delhi</div>
-              <div class="byline">Akasa Air <span class="dot"></span> <span class="qp">QP&nbsp;1178</span></div>
-              <div class="meta"><span>Tmrw 07:40</span><span class="seats">12 seats</span></div>
-              <div class="ip"><span class="was num">&#8377;7,000</span><span class="now"><span class="cur">&#8377;</span><span class="num">910</span></span></div>
-            </div>
-
-            <div class="item" data-open="detail">
-              <div class="ir">Mumbai <span class="arrow">&rarr;</span> Goa</div>
-              <div class="byline">Akasa Air <span class="dot"></span> <span class="qp">QP&nbsp;1386</span></div>
-              <div class="meta"><span>Tmrw 11:20</span><span class="seats">7 seats</span></div>
-              <div class="ip"><span class="was num">&#8377;3,600</span><span class="now"><span class="cur">&#8377;</span><span class="num">520</span></span></div>
-            </div>
-
-            <div class="folio">Waitlists open 24h before departure<br>Seats confirm about 4h before</div>
+            <div class="sechead"><span id="sechead-t">In the next 24 hours</span><span class="sub" id="sechead-s">Member fares</span></div>
+            <div class="dek" id="dek">Based on your recent trips.</div>
+            <div id="flightlist"></div>
+            <div class="folio" id="folio">Waitlists open 24h before departure<br>Seats confirm about 4h before</div>
           </div>
         </section>
 
@@ -287,31 +281,31 @@
             <span class="ed">Waitlist</span>
           </div>
           <div class="hero">
-            <div class="kicker">Tonight &middot; 21:10</div>
-            <div class="route">Pune <span class="arrow">&rarr;</span> Delhi</div>
-            <div class="byline" style="margin-top:6px">Akasa Air <span class="dot"></span> <span class="qp">QP&nbsp;1412</span></div>
+            <div class="kicker" id="d-kicker">Tonight &middot; 21:10</div>
+            <div class="route" id="d-route">Pune <span class="arrow">&rarr;</span> Delhi</div>
+            <div class="byline" id="d-byline" style="margin-top:6px">Akasa Air <span class="dot"></span> <span class="qp">QP&nbsp;1412</span></div>
           </div>
           <div class="timetable">
-            <div><div class="t num">21:10</div><div class="c">PNQ &middot; Pune</div></div>
+            <div><div class="t num" id="d-dep">21:10</div><div class="c" id="d-depcode">PNQ &middot; Pune</div></div>
             <div class="mid">
               <svg width="38" height="12" viewBox="0 0 38 12"><path d="M0 6h30m0 0l-5-4m5 4l-5 4" stroke="#7F2F26" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <div class="dur">2h 15m &middot; nonstop</div>
+              <div class="dur" id="d-dur">2h 15m &middot; nonstop</div>
             </div>
-            <div class="rt"><div class="t num">23:25</div><div class="c">DEL &middot; Delhi</div></div>
+            <div class="rt"><div class="t num" id="d-arr">23:25</div><div class="c" id="d-arrcode">DEL &middot; Delhi</div></div>
           </div>
           <div class="window">
             <div class="k">How it works</div>
             <div class="v">Seats confirm once the airline stops selling, <b>about 4h before departure</b>. Nothing is charged until then.</div>
           </div>
           <div class="ledger">
-            <div class="lrow"><span>Seat, if confirmed</span><span class="n num">&#8377;780</span></div>
+            <div class="lrow"><span>Seat, if confirmed</span><span class="n num" id="d-fare">&#8377;780</span></div>
             <div class="lrow"><span>Taxes &amp; charges</span><span class="n num">incl.</span></div>
             <div class="lrow"><span>Cabin bag (7kg)</span><span class="n num">free</span></div>
-            <div class="lrow total"><span class="lab">Charged at confirmation</span><span class="n"><span class="cur">&#8377;</span><span class="num">780</span></span></div>
+            <div class="lrow total"><span class="lab">Charged at confirmation</span><span class="n" id="d-total"><span class="cur">&#8377;</span><span class="num">780</span></span></div>
           </div>
           <div class="actionbar">
-            <button class="cta block" data-open="confirmed">Reserve a spot in the waitlist <span class="ar">&rarr;</span></button>
-            <div class="qnote">Nothing charged now &middot; you&rsquo;d be <b>1st in line</b></div>
+            <button class="cta block" id="reservebtn" data-open="confirmed">Reserve a spot in the waitlist <span class="ar">&rarr;</span></button>
+            <div class="qnote" id="qnote">Nothing charged now &middot; you&rsquo;d be <b>1st in line</b></div>
           </div>
         </section>
 
@@ -326,18 +320,18 @@
           <div class="stub">
             <div class="band">Spot reserved</div>
             <div class="inner">
-              <div class="route">Pune <span class="arrow">&rarr;</span> Delhi</div>
-              <div class="byline" style="margin-top:4px">Akasa Air <span class="dot"></span> <span class="qp">QP&nbsp;1412</span></div>
+              <div class="route" id="c-route">Pune <span class="arrow">&rarr;</span> Delhi</div>
+              <div class="byline" id="c-byline" style="margin-top:4px">Akasa Air <span class="dot"></span> <span class="qp">QP&nbsp;1412</span></div>
               <div class="grid2" style="margin-top:14px">
-                <div class="ff"><div class="k">Departs</div><div class="v num">Tue &middot; 21:10</div></div>
-                <div class="ff" style="text-align:right"><div class="k">Flight</div><div class="v num">QP&nbsp;1412</div></div>
+                <div class="ff"><div class="k">Departs</div><div class="v num" id="c-depart">Tue &middot; 21:10</div></div>
+                <div class="ff" style="text-align:right"><div class="k">Flight</div><div class="v num" id="c-qp">QP&nbsp;1412</div></div>
               </div>
               <div class="perf"></div>
               <div class="grid2">
                 <div class="ff"><div class="k">Passenger</div><div class="v">Advay Verma</div></div>
-                <div class="ff" style="text-align:right"><div class="k">Position</div><div class="v num">1 of 9</div></div>
-                <div class="ff"><div class="k">If confirmed</div><div class="v num">&#8377;780</div></div>
-                <div class="ff" style="text-align:right"><div class="k">You&rsquo;d save</div><div class="v num" style="color:#51603F">&#8377;5,420</div></div>
+                <div class="ff" style="text-align:right"><div class="k">Position</div><div class="v num" id="c-pos">1 of 9</div></div>
+                <div class="ff"><div class="k">If confirmed</div><div class="v num" id="c-fare">&#8377;780</div></div>
+                <div class="ff" style="text-align:right"><div class="k">You&rsquo;d save</div><div class="v num" id="c-save" style="color:#51603F">&#8377;5,420</div></div>
               </div>
             </div>
           </div>
@@ -480,7 +474,10 @@
             </div>
             <div class="item" style="cursor:default;grid-template-columns:1fr auto">
               <div class="ir" style="font-size:17px">Alerts</div>
-              <div class="ip" style="grid-row:1"><span class="now" style="font-size:17px;color:#51603F">On</span></div>
+              <div class="ip" style="grid-row:1;display:flex;align-items:center;gap:11px">
+                <span class="now" id="alertstate" style="font-size:15px;color:#51603F">On</span>
+                <button class="toggle" id="alertstoggle" type="button" role="switch" aria-checked="true" aria-label="Toggle alerts"><span class="knob"></span></button>
+              </div>
             </div>
           </div>
         </section>
@@ -517,6 +514,122 @@
     var screens = ["today","detail","confirmed","trips","card","family","you"];
     var tabFor = {today:"today", detail:"today", confirmed:"today", trips:"trips", card:"card", family:"card", you:"you"};
     var scroll = document.getElementById("scroll");
+
+    var AIR = {pune:"PNQ",delhi:"DEL",mumbai:"BOM",goa:"GOI",bengaluru:"BLR",bangalore:"BLR",chennai:"MAA",hyderabad:"HYD",kolkata:"CCU",jaipur:"JAI",ahmedabad:"AMD",lucknow:"LKO",kochi:"COK",cochin:"COK",chandigarh:"IXC",varanasi:"VNS",indore:"IDR",nagpur:"NAG",patna:"PAT",srinagar:"SXR",guwahati:"GAU",udaipur:"UDR",bhubaneswar:"BBI",coimbatore:"CJB",trivandrum:"TRV",thiruvananthapuram:"TRV",visakhapatnam:"VTZ",vizag:"VTZ",amritsar:"ATQ",ranchi:"IXR",raipur:"RPR",bhopal:"BHO",vadodara:"BDQ",surat:"STV",jodhpur:"JDH",dehradun:"DED",bagdogra:"IXB",siliguri:"IXB",mangalore:"IXE",mangaluru:"IXE",madurai:"IXM",trichy:"TRZ",tiruchirappalli:"TRZ",leh:"IXL",agartala:"IXA",imphal:"IMF",dibrugarh:"DIB",aurangabad:"IXU",jammu:"IXJ",rajkot:"RAJ",kanpur:"KNU",gwalior:"GWL",jabalpur:"JLR",hubli:"HBX",belgaum:"IXG",mysore:"MYQ",mysuru:"MYQ",tirupati:"TIR",vijayawada:"VGA",kannur:"CNN",kozhikode:"CCJ",calicut:"CCJ",agra:"AGR",gorakhpur:"GOP",ayodhya:"AYJ",prayagraj:"IXD",allahabad:"IXD",bareilly:"BEK",jamnagar:"JGA",bhuj:"BHJ",porbandar:"PBD",diu:"DIU",silchar:"IXS",dimapur:"DMU",aizawl:"AJL",shillong:"SHL",jorhat:"JRH",shimla:"SLV",dharamshala:"DHM",kullu:"KUU",gaya:"GAY",darbhanga:"DBR",deoghar:"DGH",durgapur:"RDP",jharsuguda:"JRG",kadapa:"CDP",kurnool:"KJB",nanded:"NDC",solapur:"SSE",nashik:"ISK",shirdi:"SAG",kolhapur:"KLH",pantnagar:"PGH",jaisalmer:"JSA",bikaner:"BKB",pathankot:"IXP"};
+    function code(city){ var k=city.toLowerCase(); return AIR[k] || city.slice(0,3).toUpperCase(); }
+    function titlecase(s){ return s.toLowerCase().replace(/\b\w/g,function(m){return m.toUpperCase();}); }
+    function comma(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,","); }
+    function mins(t){ var p=t.split(":"); return (+p[0])*60+(+p[1]); }
+    function dur(dep,arr){ var m=mins(arr)-mins(dep); if(m<0)m+=1440; var h=Math.floor(m/60),mm=m%60; return h+"h "+(mm<10?"0":"")+mm+"m"; }
+    function nbsp(qp){ return qp.replace(" ","&nbsp;"); }
+
+    var LEAD = {o:"Pune",d:"Delhi",day:"Tonight",dep:"21:10",arr:"23:25",qp:"QP 1412",seats:9,was:"6,200",now:"780"};
+    var FLIGHTS = [
+      {o:"Pune",d:"Delhi",day:"Tmrw",dep:"06:30",arr:"08:45",qp:"QP 1401",seats:11,was:"5,900",now:"760"},
+      {o:"Mumbai",d:"Delhi",day:"Tmrw",dep:"07:40",arr:"09:50",qp:"QP 1178",seats:12,was:"7,000",now:"910"},
+      {o:"Pune",d:"Goa",day:"Tmrw",dep:"09:25",arr:"10:35",qp:"QP 1332",seats:8,was:"3,400",now:"540"},
+      {o:"Mumbai",d:"Goa",day:"Tmrw",dep:"11:20",arr:"12:25",qp:"QP 1386",seats:7,was:"3,600",now:"520"},
+      {o:"Pune",d:"Delhi",day:"Tmrw",dep:"14:05",arr:"16:20",qp:"QP 1418",seats:6,was:"6,400",now:"830"},
+      {o:"Mumbai",d:"Delhi",day:"Tmrw",dep:"18:15",arr:"20:25",qp:"QP 1192",seats:9,was:"6,800",now:"880"},
+      {o:"Pune",d:"Goa",day:"Tmrw",dep:"16:40",arr:"17:50",qp:"QP 1340",seats:10,was:"3,800",now:"560"}
+    ];
+    var SELECTED = LEAD;
+    var LIMIT = 3, reserved = 0;
+
+    function itemHTML(f){
+      return '<div class="item" data-fl="'+encodeURIComponent(JSON.stringify(f))+'">'
+        + '<div class="ir">'+f.o+' <span class="arrow">&rarr;</span> '+f.d+'</div>'
+        + '<div class="byline">Akasa Air <span class="dot"></span> <span class="qp">'+nbsp(f.qp)+'</span></div>'
+        + '<div class="meta"><span>'+f.day+' &middot; '+f.dep+'&ndash;'+f.arr+'</span><span class="seats">'+f.seats+' seats</span></div>'
+        + '<div class="ip"><span class="was num">&#8377;'+f.was+'</span><span class="now"><span class="cur">&#8377;</span><span class="num">'+f.now+'</span></span></div>'
+        + '</div>';
+    }
+    function renderList(arr, msg){
+      var box=document.getElementById("flightlist");
+      if(!box) return;
+      if(!arr.length){ box.innerHTML='<div class="noresult">'+(msg||'Type an Indian city to see tonight’s seats.')+'</div>'; return; }
+      box.innerHTML = arr.map(itemHTML).join("");
+    }
+
+    var GENCACHE={};
+    function gen(dest){
+      var key=dest.toLowerCase();
+      if(GENCACHE[key]) return GENCACHE[key];
+      function r(n){ return Math.floor(Math.random()*n); }
+      var depH=6+r(15), depM=[0,5,10,15,20,25,35,40,45,50,55][r(11)];
+      var fly=60+r(130);
+      var dep=(depH<10?"0":"")+depH+":"+(depM<10?"0":"")+depM;
+      var am=depH*60+depM+fly, ah=Math.floor(am/60)%24, amm=am%60;
+      var arr=(ah<10?"0":"")+ah+":"+(amm<10?"0":"")+amm;
+      var wasN=3000+r(45)*100, nowN=480+r(9)*60;
+      var f={o:"Pune",d:titlecase(dest),day:"Tmrw",dep:dep,arr:arr,qp:"QP "+(1300+r(180)),seats:4+r(11),was:comma(wasN),now:comma(nowN)};
+      GENCACHE[key]=f; return f;
+    }
+
+    function setT(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
+    function setH(id,v){ var e=document.getElementById(id); if(e) e.innerHTML=v; }
+
+    function fillDetail(f){
+      SELECTED=f;
+      setH("d-route", f.o+' <span class="arrow">&rarr;</span> '+f.d);
+      setT("d-kicker", f.day+" · "+f.dep);
+      setH("d-byline", 'Akasa Air <span class="dot"></span> <span class="qp">'+nbsp(f.qp)+'</span>');
+      setT("d-dep", f.dep); setT("d-depcode", code(f.o)+" · "+f.o);
+      setT("d-arr", f.arr); setT("d-arrcode", code(f.d)+" · "+f.d);
+      setT("d-dur", dur(f.dep,f.arr)+" · nonstop");
+      setH("d-fare", "&#8377;"+f.now);
+      setH("d-total", '<span class="cur">&#8377;</span><span class="num">'+f.now+'</span>');
+      updateLimitUI();
+    }
+    function fillConfirmed(f){
+      setH("c-route", f.o+' <span class="arrow">&rarr;</span> '+f.d);
+      setH("c-byline", 'Akasa Air <span class="dot"></span> <span class="qp">'+nbsp(f.qp)+'</span>');
+      setH("c-depart", f.day+" &middot; "+f.dep);
+      setH("c-qp", nbsp(f.qp));
+      setT("c-pos", "1 of "+f.seats);
+      setH("c-fare", "&#8377;"+f.now);
+      var save = parseInt(f.was.replace(/,/g,''),10) - parseInt(f.now.replace(/,/g,''),10);
+      setH("c-save", "&#8377;"+comma(save>0?save:0));
+    }
+    function updateLimitUI(){
+      var btn=document.getElementById("reservebtn"), note=document.getElementById("qnote");
+      if(reserved>=LIMIT){
+        if(btn){ btn.disabled=true; btn.style.opacity=".45"; btn.style.cursor="not-allowed"; }
+        if(note){ note.innerHTML="Daily limit reached &middot; <b>3 waitlists per 24 hours</b>"; }
+      } else {
+        if(btn){ btn.disabled=false; btn.style.opacity=""; btn.style.cursor=""; }
+        if(note){ note.innerHTML="Nothing charged now &middot; <b>"+reserved+" of 3</b> waitlists used today"; }
+      }
+    }
+
+    var input=document.getElementById("flightsearch");
+    function applySearch(){
+      var q=(input.value||"").trim().toLowerCase();
+      var lead=document.getElementById("lead"), dek=document.getElementById("dek"), folio=document.getElementById("folio");
+      if(!q){
+        if(lead)lead.hidden=false; if(dek)dek.hidden=false; if(folio)folio.hidden=false;
+        setT("sechead-t","In the next 24 hours"); setT("sechead-s","Member fares");
+        renderList(FLIGHTS); return;
+      }
+      var dest=q, origin="", parts=q.split(/\s+to\s+/);
+      if(parts.length===2){ origin=parts[0].replace(/^(flights?\s+from|from)\s+/,'').trim(); dest=parts[1]; }
+      dest=dest.replace(/^(flights?|a|the|to)\s+/,'').trim();
+      if(lead)lead.hidden=true; if(dek)dek.hidden=true; if(folio)folio.hidden=true;
+      var known=FLIGHTS.filter(function(f){ return f.d.toLowerCase()===dest; });
+      if(origin){ var byO=known.filter(function(f){ return f.o.toLowerCase()===origin; }); if(byO.length) known=byO; }
+      if(known.length){
+        setT("sechead-t","Flights to "+titlecase(dest)); setT("sechead-s",known.length+" found");
+        renderList(known);
+      } else if(dest && AIR.hasOwnProperty(dest) && dest!=="pune"){
+        setT("sechead-t","Pune to "+titlecase(dest)); setT("sechead-s","1 found");
+        renderList([gen(dest)]);
+      } else {
+        setT("sechead-t","No route found"); setT("sechead-s","India only");
+        renderList([], "We only fly within India &mdash; try a city like Delhi, Goa, Jaipur or Chennai.");
+      }
+    }
+    if(input) input.addEventListener("input", applySearch);
+
     function show(id){
       if(screens.indexOf(id) < 0) return;
       screens.forEach(function(s){ var el=document.getElementById(s); if(el) el.hidden = (s !== id); });
@@ -526,20 +639,44 @@
       });
       if(scroll) scroll.scrollTop = 0;
     }
+
     document.addEventListener("click", function(e){
       var rev = e.target.closest("[data-reveal]");
       if(rev){
         var el = document.getElementById(rev.getAttribute("data-reveal"));
         if(el){ el.hidden = false; }
-        var folio = document.getElementById("tripsfolio");
-        if(folio){ folio.textContent = "7 of 7 shown"; }
+        var tf = document.getElementById("tripsfolio");
+        if(tf){ tf.textContent = "7 of 7 shown"; }
         return;
       }
+      var itemEl = e.target.closest(".item[data-fl]");
+      if(itemEl){
+        try{ fillDetail(JSON.parse(decodeURIComponent(itemEl.getAttribute("data-fl")))); }catch(err){}
+        show("detail"); return;
+      }
       var opener = e.target.closest("[data-open]");
-      if(opener){ show(opener.getAttribute("data-open")); return; }
+      if(opener){
+        var tgt=opener.getAttribute("data-open");
+        if(tgt==="detail"){ fillDetail(LEAD); show("detail"); return; }
+        if(tgt==="confirmed"){
+          if(reserved>=LIMIT){ updateLimitUI(); return; }
+          reserved++; fillConfirmed(SELECTED); show("confirmed"); updateLimitUI(); return;
+        }
+        show(tgt); return;
+      }
+      var tog = e.target.closest(".toggle");
+      if(tog){
+        var on = tog.getAttribute("aria-checked")==="true";
+        tog.setAttribute("aria-checked", on?"false":"true");
+        var st=document.getElementById("alertstate");
+        if(st){ st.textContent = on?"Off":"On"; st.style.color = on?"var(--stone)":"#51603F"; }
+        return;
+      }
       var tab = e.target.closest(".tab");
       if(tab){ show(tab.getAttribute("data-tab")); }
     });
+
+    renderList(FLIGHTS);
   })();
 </script>
 </body>
