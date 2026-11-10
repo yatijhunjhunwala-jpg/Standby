@@ -10,7 +10,7 @@
   img{max-width:100%}
   [hidden]{display:none!important}
   /* Layout: a broadsheet-styled flight app on a single phone, centred on a dark-brown "desk".
-     Palette — newsprint + Edinburgh autumn: cherry-brown, amber, heather, moss on paper & warm ink. */
+     Edinburgh autumn color theme sort of- cherry-brown, amber, mossy green */
   :root{
     color-scheme: light;
     --paper:#EFE7D6; --paper-2:#E7DDC7; --paper-3:#DED2B8;
@@ -231,7 +231,7 @@
 
       <div class="body" id="scroll">
 
-        <!-- ============ TODAY ============ -->
+        <!-- ============ TODAY section============ -->
         <section class="screen" id="today">
           <div class="masthead">
             <div class="mh-top"><span>No. 214</span><span>Evening listings</span></div>
@@ -274,22 +274,22 @@
           </div>
         </section>
 
-        <!-- ============ DETAIL ============ -->
+        <!-- ============ DETAIL (listings forflights)============ -->
         <section class="screen detail" id="detail" hidden>
           <div class="topbar">
             <button class="back" data-open="today">&larr; Listings</button>
             <span class="ed">Waitlist</span>
           </div>
           <div class="hero">
-            <div class="kicker" id="d-kicker">Tonight &middot; 21:10</div>
+          <div class="kicker" id="d-kicker">Tonight &middot; 21:10</div>
             <div class="route" id="d-route">Pune <span class="arrow">&rarr;</span> Delhi</div>
-            <div class="byline" id="d-byline" style="margin-top:6px">Akasa Air <span class="dot"></span> <span class="qp">QP&nbsp;1412</span></div>
+           <div class="byline" id="d-byline" style="margin-top:6px">Akasa Air <span class="dot"></span> <span class="qp">QP&nbsp;1412</span></div>
           </div>
           <div class="timetable">
             <div><div class="t num" id="d-dep">21:10</div><div class="c" id="d-depcode">PNQ &middot; Pune</div></div>
             <div class="mid">
               <svg width="38" height="12" viewBox="0 0 38 12"><path d="M0 6h30m0 0l-5-4m5 4l-5 4" stroke="#7F2F26" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <div class="dur" id="d-dur">2h 15m &middot; nonstop</div>
+            <div class="dur" id="d-dur">2h 15m &middot; nonstop</div>
             </div>
             <div class="rt"><div class="t num" id="d-arr">23:25</div><div class="c" id="d-arrcode">DEL &middot; Delhi</div></div>
           </div>
@@ -299,7 +299,7 @@
           </div>
           <div class="ledger">
             <div class="lrow"><span>Seat, if confirmed</span><span class="n num" id="d-fare">&#8377;780</span></div>
-            <div class="lrow"><span>Taxes &amp; charges</span><span class="n num">incl.</span></div>
+        <div class="lrow"><span>Taxes &amp; charges</span><span class="n num">incl.</span></div>
             <div class="lrow"><span>Cabin bag (7kg)</span><span class="n num">free</span></div>
             <div class="lrow total"><span class="lab">Charged at confirmation</span><span class="n" id="d-total"><span class="cur">&#8377;</span><span class="num">780</span></span></div>
           </div>
